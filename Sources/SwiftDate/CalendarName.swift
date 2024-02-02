@@ -156,7 +156,8 @@ extension Calendar.Component {
 		case .nanosecond:        return 1 << 15
 		case .calendar:          return 1 << 16
 		case .timeZone:          return 1 << 17
-		}
+        case .isLeapMonth:       return 1 << 18
+        }
 	}
 	
 	internal init?(rawValue: UInt) {
@@ -177,7 +178,12 @@ extension Calendar.Component {
 		case Calendar.Component.nanosecond.rawValue:        self = .nanosecond
 		case Calendar.Component.calendar.rawValue:          self = .calendar
 		case Calendar.Component.timeZone.rawValue:          self = .timeZone
-		default: return nil
+		default:
+            if #available(iOSApplicationExtension 17, *), rawValue == Calendar.Component.isLeapMonth.rawValue {
+                self = .isLeapMonth
+                return
+            }
+            return nil
 		}
 	}
 }
